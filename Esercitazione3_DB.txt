@@ -1,0 +1,28 @@
+--1. Trovare quanti dirigenti ci sono (senza elencarli)
+SELECT COUNT(mansione)
+FROM z_impiegati
+WHERE UPPER(mansione)='DIRIGENTE';
+--2. Trovare la massima provvigione
+SELECT MAX(commiss)
+FROM z_impiegati;
+--2. Trovare per ciascun mansione il minimo stipendio
+SELECT mansione
+, MIN(stipendio)
+FROM z_impiegati
+GROUP BY mansione
+ORDER BY mansione;
+--3. Calcolare la media del guadagno complessivo (stipendio e provvigioni) per ciascuna mansione
+SELECT mansione
+, AVG(stipendio+NVL(commiss,0)
+FROM z_impiegati
+GROUP BY mansione
+ORDER BY mansione;
+--4. Calcolare il massimo stipendio di tutti i dipendente, escluso il presidente ed i dirigenti, per ogni dipartimento. Il calcolo deve essere fatto su almeno due dipendenti. Ordinare i risultati per i valori di stipendi decrescenti
+select num_dipart
+, COUNT(matricola)
+, MAX(stipendio)
+FROM z_impiegati
+WHERE mansione NOT IN ('DIRIGENTE','PRESIDENTE')
+GROUP BY num_dipart
+HAVING COUNT(matricola)>=2
+ORDER BY MAX(stipendio) DESC;
