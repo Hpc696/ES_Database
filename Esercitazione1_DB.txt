@@ -1,0 +1,44 @@
+--1. Elencare il contenuto della tavole CATEGORIE
+SELECT *
+FROM z_categorie;
+--2. Elencare il nome ed il numero di tutti i dipartimenti
+SELECT nome_dipart
+, num_dipart
+FROM z_dipartimenti;
+--3. Elencare tutte le mansioni esistenti, senza ripeterle, in ordine alfabetico
+SELECT DISTINCT mansione
+FROM z_impiegati
+ORDER BY mansione;
+--4. Elencare i nomi di tutti i dipendenti con la qualifica di impiegato nel dipartimento 20
+SELECT nome_imp
+FROM z_impiegati
+WHERE mansione='IMPIEGATO' AND num_dipart=20 ;
+--5. Elencare i dipendenti il cui nome contiene le lette AN
+SELECT nome_imp
+FROM z_impiegati
+WHERE nome_imp LIKE '%AN%';
+--6. Elencare tutti i dipartimenti in ordine decrescente di località
+SELECT nome_dipart
+FROM z_dipartimenti
+ORDER BY localita DESC;
+--7. Trovare tutti i dipendenti che non hanno nessun superiore (il numero di matricola del superiore di ogni dipendente è contenuto nella colonna SUP della tavola IMPIEGATI)
+SELECT nome_imp
+FROM z_impiegati
+WHERE sup IS NULL;
+--8. Unire nella stessa colonna i numeri di matricola ed i nomi dei dipendenti, separandoli con un trattino
+SELECT nome_imp || '-' || matricola NOMEIMPMATR 
+FROM z_impiegati;
+--9.Diminuire del 5% lo stipendio di tutti i dipendenti assunti nella seconda metà del 2001, ad eccezione del presidente e calcolare il loro guadagnano totale (stipendio ed eventuali provvigioni)
+SELECT matricola
+, nome_imp
+, mansione
+, data_ass
+, to_char(data_ass,'dd/mm/yyyy')
+, stipendio
+, stipendio * 0.95
+, commiss
+FROM z_impiegati
+WHERE data_ass >= TO_DATE('01/06/2001','dd/mm/yyyy')
+AND data_ass <= TO_DATE('31/12/2001','dd/mm/yyyy')
+AND mansione !='PRESIDENTE'
+ORDER BY data_ass;
