@@ -1,0 +1,38 @@
+--1. Elencare il nome, lo stipendio e la località di tutti i dipendenti che lavorano a Roma o a Firenze
+SELECT IMP.nome_imp
+, IMP.matricola
+, IMP.stipendio
+, DIP.localita
+FROM z_impiegati IMP
+INNER JOIN z_dipartimenti DIP ON DIP.num_dipart=IMP.num_dipart
+WHERE DIP.localita='ROMA' OR DIP.localita='FIRENZE'
+
+--2. Elencare tutti gli impiegati ed i loro diretti superiori. Elencare anche gli eventuali impiegati che non hanno superiori
+SELECT IMP.matricola
+, IMP.nome_imp dipendente
+, SUP.nome_imp superiore
+FROM z_impiegati IMP
+LEFT OUTER JOIN z_impiegati SUP
+ON IMP.sup = SUP.matricola
+
+--3. Elencare i superiori, i loro dipendenti e gli stipendi in ordine di superiore. Elencare anche quei superiori che non hanno dipendenti
+SELECT SUP.nome_imp superiore
+, IMP.nome_imp dipendente
+, IMP.matricola
+, IMP.stipendio
+FROM z_impiegati IMP
+RIGHT OUTER JOIN z_impiegati SUP
+ON IMP.sup = SUP.matricola
+ORDER BY IMP.stipendio DESC;
+
+--4. Elencare tutti i dipendenti che guadagnano più dei dirigenti del proprio dipartimento
+SELECT IMP.matricola
+, IMP.nome_imp dipendente
+, IMP.stipendio
+, IMP.num_dipart
+FROM z_impiegati IMP
+INNER JOIN z_impiegati SUP
+ON IMP.num_dipart=SUP.num_dipart
+WHERE IMP.stipendio > SUP.stipendio AND SUP.mansione='DIRIGENTE';
+
+--5. Elencare tutti gli impiegati che cambierebbero di categoria se il loro stipendio fosse aumentato del 20%. Elencare il vecchio ed il nuovo stipendio, nonché la vecchia e la nuova categoria
