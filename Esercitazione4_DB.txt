@@ -1,0 +1,42 @@
+--1. Trovare tutti i dipendenti che lavorano nello stesso dipartimento del presidente
+SELECT nome_imp
+, mansione
+, num_dipart
+, matricola
+FROM z_impiegati
+WHERE num_dipart= (SELECT num_dipart
+                   FROM z_impiegati
+                   WHERE mansione='PRESIDENTE')
+;
+--2. Trovare tutti i dipendenti che lavorano a Roma (ricordarsi l�esistenza di una tavola DIPARTIMENTI!)
+SELECT nome_imp
+, matricola
+, num_dipart
+FROM z_impiegati
+WHERE num_dipart IN (SELECT num_dipart
+                     FROM z_DIPARTIMENTI
+                     WHERE localita='ROMA')
+;
+--3. Trovare quei dipendenti che guadagnano il minimo rispetto alla propria qualifica. Metterli in ordine di stipendio crescente
+SELECT nome_imp
+, matricola
+, mansione
+, stipendio
+FROM z_impiegati IMP1
+WHERE (stipendio) IN (SELECT MIN(IMP2.stipendio)
+                      FROM z_impiegati IMP2
+                      WHERE IMP2.mansione=IMP1.mansione
+                      GROUP BY IMP2.mansione)
+ORDER BY stipendio
+;
+--4. Trovare tutti i dipendenti che sono stati assunti prima del presidente e del signor NOVELLI
+SELECT nome_imp
+, matricola
+, data_ass
+FROM z_impiegati
+WHERE data_ass <= ALL(SELECT data_ass
+                      FROM z_impiegati
+                      WHERE mansione='PRESIDENTE'
+                      OR nome_imp='NOVELLI')
+ORDER BY 3
+;
